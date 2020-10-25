@@ -1,0 +1,33 @@
+{
+  "name": "music-classroom-connect",
+  "version": "1.0.0",
+  "description": "A web-based application to better facilitate distance music instruction.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \\\"Error: no src specified\\\" && exit 1",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/funkybunch/remote-teach-music.git"
+  },
+  "author": "Mark Adkins <mark@bymark.co> (https://bymark.co)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/funkybunch/remote-teach-music/issues"
+  },
+  "homepage": "https://github.com/funkybunch/remote-teach-music#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "peer": "^0.5.3",
+    "peerjs": "^1.3.1",
+    "socket.io": "^2.3.0",
+    "uid-generator": "^2.0.0",
+    "vue": "^2.6.12"
+  },
+  "devDependencies": {
+    "copy-webpack-plugin": "^6.2.1",
+    "vue-loader": "^15.9.3",
+    "webpack": "^5.2.0"
+  }
+}
