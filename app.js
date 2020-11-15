@@ -1,10 +1,8 @@
-import * as fs from "fs";
-import * as path from "socket.io";
-
 const app = require('express')();
 const session = require('express-session');
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
+const path = require('path');
 const { PeerServer } = require('peer');
 const UIDGenerator = require('uid-generator');
 const uidgen = new UIDGenerator(256);
@@ -13,7 +11,8 @@ const { v4: uuidv4 } = require('uuid');
 const { google } = require('googleapis');
 const OAuth2Data = require('./google-client-credentials.json');
 const environment = process.env.NODE_ENV;
-const queryString = require('query-string');
+
+const common = require('./common.js');
 
 const CLIENT_ID = OAuth2Data.web.client_id;
 const CLIENT_SECRET = OAuth2Data.web.client_secret;
@@ -90,28 +89,6 @@ function createClassroomID(iteration = 1) {
     } else {
         return id;
     }
-}
-
-function fileExists(path) {
-    try {
-        if (fs.existsSync(path)) {
-            return true;
-        }
-    } catch(err) {
-        return false;
-    }
-}
-
-function generateUniqueFilename(parentPath, extension) {
-    let name = generateToken(48);
-    if(fileExists(parentPath + name + extension)) {
-        return generateUniqueFilename(parentPath, extension);
-    }
-    return name + extension;
-}
-
-function getFileExtension(filename) {
-    return filename.split('.').pop();
 }
 
 function isInstructor(profile) {
@@ -203,11 +180,15 @@ app.get('/', (req, res) => {
 });
 
 app.get('/js/socket.io.js', (req, res) => {
-    res.sendFile(__dirname + '../../node_modules/socket.io-client/dist/socket.io.js');
+    res.sendFile(path.join(__dirname, './node_modules/socket.io-client/dist/socket.io.js'));
+});
+
+app.get('/socket.io/', (req, res) => {
+    res.sendFile(path.join(__dirname, './node_modules/socket.io-client/dist/socket.io.js'));
 });
 
 app.get('/js/*', (req, res) => {
-    res.sendFile(__dirname + '/src' + req.path);
+    res.sendFile(path.join(__dirname, 'dist', req.path));
 });
 
 app.get('/media/*', (req, res) => {
@@ -389,6 +370,23 @@ app.get('/api/classes/', (req, res) => {
     }
 });
 
+app.get('/api/class/', (req, res) => {
+    let classID = req.query.classID;
+    if(classrooms.has(classID)) {
+        if(isOwner(req.session.profile, classID)) {
+            let classroom = classrooms.get(classID);
+            res.status(200);
+            res.json(classroom);
+        } else {
+            res.status(403);
+            res.send("Not Authorized");
+        }
+    } else {
+        res.status(404);
+        res.send("Not Found");
+    }
+});
+
 app.get('/api/open/', (req, res) => {
     let classID = req.query.classID;
     if(isOwner(req.session.profile, classID)) {
@@ -432,7 +430,7 @@ app.post('/api/upload/', (req, res) => {
         }
         let mediaFile = req.files.media;
 
-        let filename = generateUniqueFilename(path.join(__dirname, 'uploads'), getFileExtension(mediaFile.name))
+        let filename = common.generateUniqueFilename(path.join(__dirname, 'uploads'), common.getFileExtension(mediaFile.name))
         mediaFile.mv(path.join(__dirname, 'uploads', filename), function(err) {
             if (err) {
                 res.status(500);
@@ -485,7 +483,9 @@ io.on('connection', (socket) => {
         console.log(socket.conn.remoteAddress, 'connected to', room);
         if(classrooms.get(classID)) {
             let classData = classrooms.get(classID);
-            classData.attendees++;
+            let clients = io.nsps['/'].adapter.rooms[room];
+            let attendees = Object.keys(clients).length;
+            classData.attendees = attendees-1;
             classrooms.set(classID, classData);
             console.log('attendees in class: ' + classData.attendees)
             socket.emit('chat message', 'There are ' + classData.attendees + ' people in class right now.');
@@ -506,12 +506,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('disconnect', () => {
-        if(classrooms.get(classID)) {
-            let classData = classrooms.get(classID);
-            classData.attendees--;
-            classrooms.set(classID, classData);
-        }
-        console.log('user at ' + socket.conn.remoteAddress + ' disconnected');
+        console.log('a user disconnected');
     });
 });
 

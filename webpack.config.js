@@ -1,11 +1,13 @@
 const path = require('path');
 const { VueLoaderPlugin } = require('vue-loader');
+const CopyPlugin = require("copy-webpack-plugin");
 
 // webpack.config.js
 module.exports = {
     mode: process.env.NODE_ENV,
     entry: {
-        app: "./src/js/app-classroom.js",
+        classroom: "./src/js/app-classroom.js",
+        instructor: "./src/js/app-instructor.js",
     },
     module: {
         rules: [
@@ -27,7 +29,7 @@ module.exports = {
         ]
     },
     plugins: [
-        new VueLoaderPlugin()
+        new VueLoaderPlugin(),
     ],
     devServer: {
         contentBase: path.join(__dirname, 'dist'),
