@@ -104,3 +104,6 @@ dist
 .tern-port
 
 .idea/
+google-client-credentials.json
+auth.js
+data/instructors.json
