@@ -12,15 +12,9 @@ let userID;
 
 socket.emit('join', room);
 
-// $('form#messaging').submit(function(e) {
-//     e.preventDefault(); // prevents page reloading
-//     socket.emit('chat message', $('#m').val());
-//     $('#m').val('');
-//     return false;
-// });
-
 socket.on('user-id', function(uid){
     instructorApp.sendNotification('Assigned User ID: ' + uid);
+    console.log('Assigned User ID: ' + uid);
     userID = uid;
     instructorApp.$data.peer.config = new Peer(userID, {
         host: window.location.hostname,
@@ -29,9 +23,9 @@ socket.on('user-id', function(uid){
     })
 });
 
-socket.on('chat message', function(msg){
-    instructorApp.sendNotification(msg);
-});
+function sendConnectionRequest() {
+    // socket.emit('connection request', 'connect');
+}
 
 let instructorApp = new Classroom({
     name: 'Music Connect Classroom',
@@ -52,7 +46,7 @@ let instructorApp = new Classroom({
                 this.peerListener = listener;
             }
         },
-        conn: null
+        conns: []
     },
     watch: {
         status: function(newVal, oldVal) {
@@ -74,29 +68,52 @@ let instructorApp = new Classroom({
     },
     methods: {
         sendPlay: function() {
-            this.sendTestLog('Sent: play 1');
-            this.conn.send('play 1');
+            sendConnectionRequest();
+            this.sendTestLog('Sent: play ' + this.selectedFile);
+            this.sendDataToConnections('play ' + this.selectedFile);
         },
         sendPause: function() {
             this.sendTestLog('Sent: pause');
-            this.conn.send('pause');
+            this.sendDataToConnections('pause');
         },
         sendResume: function() {
             this.sendTestLog('Sent: resume');
-            this.conn.send('resume');
+            this.sendDataToConnections('resume');
         },
         sendStop: function() {
             this.sendTestLog('Sent: stop');
-            this.conn.send('stop');
+            this.sendDataToConnections('stop');
+            // this.clearConnections();
         },
-        getClassInfo() {
+        getClassInfo: function(run = 0) {
             let self = this;
+            sendConnectionRequest();
             axios
-                .get('/api/class/?classID=' + this.room)
-                .then(response => (this.classroom = response.data));
+                .get('/api/class/?classID=' + self.room)
+                .then(response => (self.classroom = response.data))
+                .then(function() {
+                    if(run === 0) {
+                        self.preloadMedia();
+                    }
+                });
             setTimeout(function() {
                 self.getClassInfo();
             }, 5000);
+        },
+        preloadMedia() {
+            // we start preloading all the audio files
+            for (let i in this.classroom.media) {
+                this.preloadAudio(this.classroom.media[i].file);
+            }
+        },
+        sendDataToConnections(data) {
+            for(let i = 0; i < this.conns.length; i++) {
+                this.conns[i].send(data);
+            }
+        },
+        clearConnections() {
+            // this.conns = [];
+            sendConnectionRequest();
         }
     },
     mounted() {
@@ -104,11 +121,13 @@ let instructorApp = new Classroom({
         this.getClassInfo();
         this.peer.registerListener(function(webRTC){
             self.sendNotification('WebRTC Connection Initialized');
+            console.log('WebRTC Connection Initialized');
             webRTC.on('connection', function(conn) {
-                self.conn = conn;
+                self.conns.push(conn);
+                console.log(self.conns);
                 self.sendNotification('WebRTC Connection Established With Student');
-                self.conn.on('open', function(){
-                    self.conn.send('connected via webRTC!');
+                conn.on('open', function(){
+                    conn.send('connected via webRTC!');
                 });
             });
         })

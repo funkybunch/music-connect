@@ -2,6 +2,8 @@
   <div>
     <h1 class="display">Instructor View ({{ profile.name }})</h1>
     <h2>{{ classroom.class }} ({{ (classroom.open === true) ? 'Open' : 'Closed' }})</h2>
+    <button v-if="classroom.open === true" v-on:click="closeClass">Close Classroom</button>
+    <button v-if="classroom.open === false" v-on:click="openClass">Open Classroom</button>
     <main>
       <section>
         <h1>Messaging</h1>
@@ -16,7 +18,7 @@
         <h2>Media & WebRTC Communication</h2>
         <audio id="player" ref="player"></audio>
         <form action="">
-          <button id="play" v-on:click.prevent="play(0)" v-if="status === 'stopped'">play</button>
+          <button id="play" v-on:click.prevent="play(selectedFile)" v-if="status === 'stopped'">play</button>
           <button id="pause" v-on:click.prevent="pause" v-else-if="status === 'playing' || status === 'resumed'">pause</button>
           <button id="resume" v-on:click.prevent="resume" v-else-if="status === 'paused'">play</button>
           <button id="stop" v-on:click.prevent="stop">stop</button>
@@ -35,9 +37,7 @@ export default {
     return {
       profile: {},
       classroom: {},
-      audioFiles: [
-        "http://10.134.5.9:3000/uploads/mixkit-raising-me-higher-34.mp3"
-      ],
+      selectedFile: 0,
       filesLoaded: 0,
       status: 'stopped',
       notifications: []
@@ -55,13 +55,13 @@ export default {
       // this will be called every time an audio file is loaded
       // we keep track of the loaded files vs the requested files
       this.filesLoaded++;
-      if (this.filesLoaded === this.audioFiles.length) {
+      if (this.filesLoaded === this.classroom.media.length) {
         // all have loaded
         this.sendNotification('All Media Files Have Been Pre-Loaded');
       }
     },
     play: function (index) {
-      this.$refs.player.src = this.audioFiles[index];
+      this.$refs.player.src = this.classroom.media[index].file;
       this.$refs.player.play();
       this.status = 'playing';
     },
@@ -78,24 +78,33 @@ export default {
       this.$refs.player.pause();
       this.status = 'stopped';
     },
-    sendNotification(message) {
+    sendNotification: function(message) {
       this.notifications.push(message);
     },
-    sendTestLog(message) {
+    sendTestLog: function(message) {
       console.log(message);
     },
-    getProfile() {
+    getProfile: function() {
+      let self = this;
       axios
           .get('/api/profile/')
-          .then(response => (this.profile = response.data))
-    }
+          .then(response => (self.profile = response.data))
+    },
+    openClass: function() {
+      let self = this;
+      axios
+          .get('/api/open/?classID=' + self.classroom.id);
+      self.classroom.open = true;
+    },
+    closeClass: function() {
+      let self = this;
+      axios
+          .get('/api/close/?classID=' + self.classroom.id);
+      self.classroom.open = false;
+    },
   },
   mounted() {
     this.getProfile();
-    // we start preloading all the audio files
-    for (let i in this.audioFiles) {
-      this.preloadAudio(this.audioFiles[i]);
-    }
   }
 }
 

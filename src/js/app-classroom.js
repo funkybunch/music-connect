@@ -3,6 +3,7 @@ import Vue from 'Vue';
 let socket = io();
 
 import ClassroomPage from './pages/classroom.vue';
+import axios from "axios";
 const Classroom = Vue.extend(ClassroomPage)
 
 const room = window.location.pathname.split("/")[2];
@@ -49,19 +50,19 @@ socket.on('user-id', function(uid){
     })
 });
 socket.on('connect-id', function(cid){
-    classroomApp.sendNotification('Connect ID' + cid);
+    classroomApp.sendNotification('Connect ID ' + cid);
     connection.config = peer.config.connect(cid);
-});
-socket.on('chat message', function(msg){
-    classroomApp.sendNotification(msg);
+    console.log("attempting to connect to " + cid);
 });
 
 connection.registerListener(function(connection){
     classroomApp.sendNotification('WebRTC Connection Initialized');
+    console.log('WebRTC Connection Initialized');
     connection.on('data', (data) => {
         classroomApp.sendTestLog('Instructor Signal: ' + data);
         if(data.startsWith("play ")) {
-            classroomApp.play(parseInt(data.replace(/\D/g,''))-1);
+            classroomApp.setSelectedFile(parseInt(data.replace(/\D/g,'')));
+            classroomApp.play();
         } else if(data === "pause") {
             classroomApp.pause();
         } else if(data === "resume") {
@@ -78,5 +79,30 @@ let classroomApp = new Classroom({
     data: {
         room: room,
         notifications: []
-    }
+    },
+    methods: {
+        getClassInfo: function(run = 0) {
+            let self = this;
+            axios
+                .get('/api/class/?classID=' + this.room)
+                .then(response => (self.classroom = response.data))
+                .then(function() {
+                    if(run === 0) {
+                        self.preloadMedia();
+                    }
+                });
+            setTimeout(function() {
+                self.getClassInfo();
+            }, 5000);
+        },
+        preloadMedia: function() {
+            // we start preloading all the audio files
+            for (let i in this.classroom.media) {
+                this.preloadAudio(this.classroom.media[i].file);
+            }
+        }
+    },
+    mounted() {
+        this.getClassInfo();
+    },
 });

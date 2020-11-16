@@ -91,6 +91,13 @@ function createClassroomID(iteration = 1) {
     }
 }
 
+function isSignedIn(session) {
+    if(session.authed && session.authed === true) {
+        return true;
+    }
+    return false;
+}
+
 function isInstructor(profile) {
     if(profile) {
         for(let i = 0;i < profile.emails.length; i++) {
@@ -135,7 +142,13 @@ function createClassroom(profile, teacher, className) {
         class: className,
         token: uidgen.generateSync(),
         open: false,
-        media: {},
+        media: [
+            {
+                name: "Sample Song",
+                duration: 97.67,
+                file: "/media/mixkit-raising-me-higher-34.mp3"
+            }
+        ],
         attendees: 0
     });
 
@@ -191,6 +204,10 @@ app.get('/js/*', (req, res) => {
     res.sendFile(path.join(__dirname, 'dist', req.path));
 });
 
+app.get('/assets/*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'dist', req.path));
+});
+
 app.get('/media/*', (req, res) => {
     res.sendFile(__dirname + '/uploads' + req.path);
 });
@@ -213,6 +230,7 @@ app.get('/auth', function (req, res) {
                 request.session.tokens = tokens;
                 getUserData(OAuth2Client, request);
                 req.session.authed = true;
+                req.session.save();
                 res.redirect('/');
             }
         });
@@ -240,13 +258,8 @@ app.get('/c/*/', (req, res) => {
             res.redirect(auth.url);
         } else {
             let classData = classrooms.get(classID);
-            if(classData.open === true) {
-                res.status(200);
-                res.sendFile(__dirname + '/src/classroom.html');
-            } else {
-                res.status(200);
-                res.send('<p>The instructor has not opened the room yet.  Please try again later.</p>');
-            }
+            res.status(200);
+            res.sendFile(__dirname + '/src/classroom.html');
         }
     } else {
         res.status(404);
@@ -375,8 +388,19 @@ app.get('/api/class/', (req, res) => {
     if(classrooms.has(classID)) {
         if(isOwner(req.session.profile, classID)) {
             let classroom = classrooms.get(classID);
+            classroom.id = classID;
             res.status(200);
             res.json(classroom);
+        } else if(isSignedIn(req.session)) {
+            let classroom = classrooms.get(classID);
+            res.status(200);
+            let response = {
+                teacher: classroom.teacher,
+                class: classroom.class,
+                media: classroom.media,
+                open: classroom.open
+            }
+            res.json(response);
         } else {
             res.status(403);
             res.send("Not Authorized");
@@ -491,7 +515,7 @@ io.on('connection', (socket) => {
             socket.emit('chat message', 'There are ' + classData.attendees + ' people in class right now.');
             if(connectionType === 'c') {
                 socket.emit('user-id', socket.id);
-                socket.emit('connect-id', classData.token);
+                io.to(classID).emit('connect-id', classData.token);
             } else if(connectionType === 'i') {
                 socket.emit('user-id', classData.token);
                 io.to(classID).emit('connect-id', classData.token);
@@ -502,7 +526,16 @@ io.on('connection', (socket) => {
         io.to(classID).emit('chat message', msg);
     });
     socket.on('connection request', (msg) => {
-        io.to(classID).emit('connection request', msg);
+        let classData = classrooms.get(classID);
+        if(classrooms.get(classID)) {
+            if(connectionType === 'c') {
+                socket.emit('user-id', socket.id);
+                io.to(classID).emit('connect-id', classData.token);
+            } else if(connectionType === 'i') {
+                socket.emit('user-id', classData.token);
+                io.to(classID).emit('connect-id', classData.token);
+            }
+        }
     });
 
     socket.on('disconnect', () => {
