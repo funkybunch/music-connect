@@ -24,7 +24,7 @@ socket.on('user-id', function(uid){
 });
 
 function sendConnectionRequest() {
-    // socket.emit('connection request', 'connect');
+    socket.emit('connection request', 'connect');
 }
 
 let instructorApp = new Classroom({
@@ -83,11 +83,11 @@ let instructorApp = new Classroom({
         sendStop: function() {
             this.sendTestLog('Sent: stop');
             this.sendDataToConnections('stop');
-            // this.clearConnections();
+            this.clearConnections();
         },
         getClassInfo: function(run = 0) {
             let self = this;
-            sendConnectionRequest();
+            self.clearConnections();
             axios
                 .get('/api/class/?classID=' + self.room)
                 .then(response => (self.classroom = response.data))
@@ -112,7 +112,7 @@ let instructorApp = new Classroom({
             }
         },
         clearConnections() {
-            // this.conns = [];
+            this.conns = [];
             sendConnectionRequest();
         }
     },
