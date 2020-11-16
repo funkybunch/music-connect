@@ -21,7 +21,12 @@
       <aside>
         <div class="card">
           <h3>{{ (connected === true) ? 'You Are Connected' : 'Disconnected' }}</h3>
-          <p><span style="width:26px;height:26px;"></span></p>
+          <p style="display: flex;align-content: center;margin-top: 12px;margin-bottom: 12px;">
+            <span style="display:inline-block;width:26px;height:26px;border-radius:50%;" :style="(connected === true) ? 'background-color:#2DAF00;' : 'background-color:#AF0000'"></span>
+            <span style="margin-left: 16px;margin-top:4px">{{ (connected === true) ? 'Everything Looks Good!' : 'Trying to reconnect...' }}</span>
+          </p>
+          <label for="volumeSlider" style="font-weight: bold;margin-top:12px;">Volume</label>
+          <input type="range" id="volumeSlider" min="0" max="100" v-model="volume" style="width: 100%;">
         </div>
       </aside>
     </main>
@@ -46,6 +51,7 @@ export default {
       selectedFile: 0,
       fileDuration: 0,
       filesLoaded: 0,
+      volume: 50,
       playerInitialized: false,
       playerProgressPercentage: 0,
       playerTimestamp: "0:00",
@@ -83,11 +89,10 @@ export default {
     },
     play: function() {
       this.$refs.player.src = this.classroom.media[this.selectedFile].file;
+      this.setVolume(this.volume);
       this.$refs.player.play();
       this.playerInitialized = true;
       this.fileDuration = this.classroom.media[this.selectedFile].duration;
-      console.log('time:', this.$refs.player.currentTime);
-      console.log('duration:', this.classroom.media[this.selectedFile].duration);
       this.updateMarker();
     },
     pause: function() {
@@ -116,6 +121,9 @@ export default {
           .get('/api/profile/')
           .then(response => (this.profile = response.data))
     },
+    setVolume(level) {
+      this.$refs.player.volume = (level/100);
+    },
     updateMarker: function(reset = false) {
       let self = this;
       if(!this.$refs.player.paused && !reset) {
@@ -133,6 +141,11 @@ export default {
         this.playerProgressPercentage = 0;
         this.playerTimestamp = this.formatAsTime(0);
       }
+    }
+  },
+  watch: {
+    volume: function(newVal) {
+      this.setVolume(newVal);
     }
   },
   mounted() {

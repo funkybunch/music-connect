@@ -76,9 +76,11 @@ connection.registerListener(function(connection){
 let classroomApp = new Classroom({
     name: 'Music Connect Classroom',
     el: '#classroomApp',
-    data: {
-        room: room,
-        notifications: []
+    data() {
+        return {
+            room: room,
+            notifications: []
+        }
     },
     methods: {
         getClassInfo: function(run = 0) {

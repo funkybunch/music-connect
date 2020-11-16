@@ -30,23 +30,25 @@ function sendConnectionRequest() {
 let instructorApp = new Classroom({
     name: 'Music Connect Classroom',
     el: '#instructorApp',
-    data: {
-        room: room,
-        peer: {
-            initialValue: {},
-            peerListener: function(val) {},
-            set config(val) {
-                this.initialValue = val;
-                this.peerListener(val);
+    data() {
+        return {
+            room: room,
+            peer: {
+                initialValue: {},
+                peerListener: function(val) {},
+                set config(val) {
+                    this.initialValue = val;
+                    this.peerListener(val);
+                },
+                get config() {
+                    return this.initialValue;
+                },
+                registerListener: function(listener) {
+                    this.peerListener = listener;
+                }
             },
-            get config() {
-                return this.initialValue;
-            },
-            registerListener: function(listener) {
-                this.peerListener = listener;
-            }
-        },
-        conns: []
+            conns: []
+        }
     },
     watch: {
         status: function(newVal, oldVal) {

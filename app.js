@@ -144,9 +144,14 @@ function createClassroom(profile, teacher, className) {
         open: false,
         media: [
             {
-                name: "Sample Song",
+                name: "Raising Me Higher (Mixkit)",
                 duration: 97.67,
                 file: "/media/mixkit-raising-me-higher-34.mp3"
+            },
+            {
+                name: "Dance With Me (Mixkit)",
+                duration: 142,
+                file: "/media/mixkit-dance-with-me-3.mp3"
             }
         ],
         attendees: 0
@@ -172,10 +177,11 @@ function getUserData(client, request) {
             for(let i = 0; i < profile.emailAddresses.length; i++) {
                 delete profile.emailAddresses[i].metadata;
             }
-            saveProfileToSession(request, {
+            let userProfile = {
                 name: profile.names[0].displayName,
                 emails: profile.emailAddresses
-            });
+            };
+            saveProfileToSession(request, userProfile);
         }
     });
 }
@@ -183,12 +189,29 @@ function getUserData(client, request) {
 app.get('/', (req, res) => {
     if(req.session.redirect) {
         if(req.session.redirect.instructor) {
+            res.redirect('/i/' + req.session.redirect.classroom);
+        } else {
+            res.redirect('/c/' + req.session.redirect.classroom);
+        }
+    } else {
+        res.send('<p>App Home Page</p><p><a href="/classes/">My Classes</a></p><p><a href="/signin/">Sign In</a></p>');
+    }
+});
+
+app.get('/classes/', (req, res) => {
+    if(req.session.redirect) {
+        if(req.session.redirect.instructor) {
             res.redirect('/i/' + req.session.redirect.classroom)
         } else {
             res.redirect('/c/' + req.session.redirect.classroom)
         }
     } else {
-        res.send('<p>App Home Page</p>');
+        if(isInstructor(req.session.profile)) {
+            res.status(200);
+            res.sendFile(__dirname + '/src/instructor-home.html');
+        } else {
+            res.redirect('/');
+        }
     }
 });
 
@@ -240,7 +263,7 @@ app.get('/auth', function (req, res) {
 app.get('/signout', function (req, res) {
     if(req.session.authed && req.session.authed === true) {
         req.session.authed = false;
-        req.session = {};
+        req.session.profile = {};
         req.session.save();
     }
     res.redirect('/');

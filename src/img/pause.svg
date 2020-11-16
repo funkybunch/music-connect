@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="30px" height="30px" viewBox="0 0 30 30" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 63.1 (92452) - https://sketch.com -->
+    <title>Shape</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Instructor-View" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="I---1-Instructor-Active-Classroom" transform="translate(-1040.000000, -854.000000)" fill="#FFFFFF" fill-rule="nonzero">
+            <g id="Group-3" transform="translate(733.000000, 672.000000)">
+                <g id="Group-2" transform="translate(287.000000, 162.000000)">
+                    <path d="M29.75,50 L23.25,50 C21.4557292,50 20,48.5602679 20,46.7857143 L20,23.2142857 C20,21.4397321 21.4557292,20 23.25,20 L29.75,20 C31.5442708,20 33,21.4397321 33,23.2142857 L33,46.7857143 C33,48.5602679 31.5442708,50 29.75,50 Z M50,46.7857143 L50,23.2142857 C50,21.4397321 48.5442708,20 46.75,20 L40.25,20 C38.4557292,20 37,21.4397321 37,23.2142857 L37,46.7857143 C37,48.5602679 38.4557292,50 40.25,50 L46.75,50 C48.5442708,50 50,48.5602679 50,46.7857143 Z" id="Shape"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -2,18 +2,39 @@
 <html>
     <head>
         <title>Music Connect</title>
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
         <style>
             * { margin: 0; padding: 0; box-sizing: border-box; }
-            body { font: 13px Helvetica, Arial; width: 90%; margin-left: 5%; }
+            body { font: 13px 'Poppins', sans-serif; width: 90%; margin-left: 5%; }
             main { display: flex; }
-            h1.display { font-size: 2em; margin-top: 2em }
+            h1 {
+                font-family: 'Poppins', sans-serif;
+                font-weight: bold;
+                font-size: 36px;
+                color: #343434;
+                letter-spacing: 1.8px; }
             form { background: #000; padding: 3px; position: relative; bottom: 0; border-radius: 20px; }
             form input { border: 0; padding: 10px; width: 80%; margin-right: 0.5%; border-radius: 20px;  }
             form button { width: 15%; background: white; color: black; border: none; padding: 10px; border-radius: 20px; margin-left: 10px; cursor: pointer }
             #messages, #webrtc { list-style-type: none; margin: 0; padding: 0; min-height: 400px; }
             #messages li, #webrtc li { padding: 5px 10px; }
             #messages li:nth-child(odd), #webrtc li:nth-child(odd) { background: #eee; }
-            section { width: 40%; display: inline-block; margin-left: 5%; margin-top: 30px; }
+            section { width: 45%; display: inline-block; margin-right: 5%; margin-top: 30px; }
+            .card {
+                background: #FFFFFF;
+                box-shadow: 0 6px 6px 0 rgba(0,0,0,0.23), 0 10px 20px 0 rgba(0,0,0,0.19);
+                border-radius: 12px;
+                padding: 28px 24px;
+                margin-bottom: 32px;
+            }
+            .card h3 {
+                font-family: 'Poppins', sans-serif;
+                font-size: 24px;
+                color: #000000;
+                letter-spacing: 1px;
+                line-height: 32px;
+            }
         </style>
     </head>
     <body>

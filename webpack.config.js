@@ -8,6 +8,7 @@ module.exports = {
     entry: {
         classroom: "./src/js/app-classroom.js",
         instructor: "./src/js/app-instructor.js",
+        instructorHome: "./src/js/app-instructor-home.js",
     },
     module: {
         rules: [
