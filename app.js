@@ -1,9 +1,10 @@
 const app = require('express')();
+const ws = require('ws');
 const session = require('express-session');
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
 const path = require('path');
-const { PeerServer } = require('peer');
+const {ExpressPeerServer} = require('peer');
 const UIDGenerator = require('uid-generator');
 const uidgen = new UIDGenerator(256);
 require('dotenv').config()
@@ -39,8 +40,14 @@ app.use(session({
     }
 }));
 
+const peerServer = ExpressPeerServer(http, {
+    debug: true,
+    path: '/'
+});
+
+app.use('/switchboard', peerServer);
+
 let classrooms = new Map();
-const peerServer = PeerServer({ port: 9000, path: '/switchboard' });
 
 function createConnection() {
     return new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URL);
