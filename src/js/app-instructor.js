@@ -5,6 +5,7 @@ let socket = io();
 import InstructorPage from './pages/instructor.vue';
 import axios from "axios";
 const Classroom = Vue.extend(InstructorPage)
+const port = (process.env.NODE_ENV === "production") ? 443 : 3000;
 
 const room = window.location.pathname.split("/")[2];
 
@@ -18,7 +19,7 @@ socket.on('user-id', function(uid){
     userID = uid;
     instructorApp.$data.peer.config = new Peer(userID, {
         host: window.location.hostname,
-        port: 3000,
+        port: port,
         path: '/switchboard'
     })
 });
