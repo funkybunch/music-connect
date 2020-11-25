@@ -1,4 +1,4 @@
-import Vue from 'Vue';
+import Vue from 'vue';
 
 import InstructorHomePage from './pages/instructor-home.vue';
 const Classroom = Vue.extend(InstructorHomePage)
