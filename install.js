@@ -6,12 +6,16 @@ const axios = require('axios').default;
 const env = require('dotenv').config();
 const { spawn } = require('child_process');
 
-// Functions
-function buildApp() {
-    spawnProcess('npm', ['run', 'build']);
+// NPM Install
+function installApp() {
+    spawnProcess('npm', ['install'], function() {
+        spawnProcess('npm', ['run', 'build']);
+    });
 }
 
-function spawnProcess(cmd, args) {
+function spawnProcess(cmd, args, callback = function() {
+    console.log("End of processes");
+}) {
     const process = spawn(cmd, args, {stdio: ['inherit']});
     process.stdout.on('data', function(data) {
         console.log(data.toString());
@@ -21,7 +25,11 @@ function spawnProcess(cmd, args) {
     });
     process.on('exit', function(code) {
         console.log('child process exited with code ' + code.toString());
-    })
+    });
+    process.on('close', function() {
+        console.log('Calling callback');
+        callback();
+    });
 }
 
-buildApp()
+installApp();
