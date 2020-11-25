@@ -24,7 +24,7 @@ const scopes = [
     'https://www.googleapis.com/auth/userinfo.profile'
 ];
 
-let instructors = require('./data/instructors.json');
+let instructors = (process.env.INSTRUCTORS)? JSON.parse(process.env.INSTRUCTORS) : require('./data/instructors.json');
 
 app.set('trust proxy', 1)
 app.use(session({
