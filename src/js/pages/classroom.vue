@@ -3,7 +3,7 @@
     <img src="../../img/music-connect.svg" alt="Music Connect Logo" style="margin-top:36px" />
     <h1 class="display">{{ classroom.class }}</h1>
     <h2>Taught by {{ classroom.teacher }}</h2>
-    <main v-if="classroom.open === true">
+    <main v-if="(classroom.open === true) && joined">
       <section>
         <div class="card">
           <h3>Currently Playing</h3>
@@ -30,9 +30,16 @@
         </div>
       </aside>
     </main>
-    <main v-else>
+    <main v-else-if="(classroom.open === false) && joined">
       <section>
         <p>The instructor has not opened the class.  You will be automatically placed in the class when it starts.</p>
+      </section>
+    </main>
+    <main v-else>
+      <section>
+        <h3>We&apos;re all set!</h3>
+        <p>Join when you are ready</p>
+        <button v-on:click="joinClass" style="align-self:center;cursor:pointer;padding:12px 16px;background-color:#0250AE;border-radius:8px;font-weight:bold;color:white;border:none;">Join Class</button>
       </section>
     </main>
   </div>
@@ -46,6 +53,7 @@ export default {
   data() {
     return {
       profile: {},
+      joined: false,
       classroom: {},
       connected: false,
       selectedFile: 0,
@@ -141,6 +149,9 @@ export default {
         this.playerProgressPercentage = 0;
         this.playerTimestamp = this.formatAsTime(0);
       }
+    },
+    joinClass: function() {
+      this.joined = true;
     }
   },
   watch: {

@@ -5,7 +5,7 @@ let socket = io();
 import ClassroomPage from './pages/classroom.vue';
 import axios from "axios";
 const Classroom = Vue.extend(ClassroomPage)
-const port = (process.env.NODE_ENV === "production") ? 443 : 3000;
+const port = (window.location.hostname === "localhost") ? 3000 : 443;
 
 const room = window.location.pathname.split("/")[2];
 
@@ -53,7 +53,6 @@ socket.on('user-id', function(uid){
 socket.on('connect-id', function(cid){
     classroomApp.sendNotification('Connect ID ' + cid);
     connection.config = peer.config.connect(cid);
-    console.log("attempting to connect to " + cid);
 });
 
 connection.registerListener(function(connection){
