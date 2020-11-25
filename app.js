@@ -2,6 +2,7 @@ const app = require('express')();
 const ws = require('ws');
 const session = require('express-session');
 const http = require('http').createServer(app);
+const url = require('url');
 const io = require('socket.io')(http);
 const path = require('path');
 const {ExpressPeerServer} = require('peer');
@@ -46,6 +47,19 @@ const peerServer = ExpressPeerServer(http, {
 });
 
 app.use('/switchboard', peerServer);
+
+let [socketioUpgradeListener, peerUpgradeListener] = http.listeners('upgrade').slice(0);
+http.removeAllListeners('upgrade');
+http.on('upgrade', (req, socket, head) => {
+    const pathname = url.parse(req.url).pathname;
+    if (pathname.startsWith('/socket.io')) {
+        socketioUpgradeListener(req, socket, head);
+    } else if (pathname.startsWith('/switchboard')) {
+        peerUpgradeListener(req, socket, head);
+    } else {
+        socket.destroy();
+    }
+});
 
 let classrooms = new Map();
 
