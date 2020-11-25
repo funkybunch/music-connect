@@ -19,7 +19,7 @@ socket.on('user-id', function(uid){
     instructorApp.$data.peer.config = new Peer(userID, {
         host: window.location.hostname,
         port: 9000,
-        path: '/'
+        path: '/switchboard'
     })
 });
 

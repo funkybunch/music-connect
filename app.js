@@ -9,7 +9,7 @@ const uidgen = new UIDGenerator(256);
 require('dotenv').config()
 const { v4: uuidv4 } = require('uuid');
 const { google } = require('googleapis');
-const OAuth2Data = require('./google-client-credentials.json');
+const OAuth2Data = (process.env.GOOGLE_CRED)? JSON.parse(process.env.GOOGLE_CRED) : require('./google-client-credentials.json');
 const environment = process.env.NODE_ENV;
 
 const common = require('./common.js');
@@ -40,7 +40,7 @@ app.use(session({
 }));
 
 let classrooms = new Map();
-const peerServer = PeerServer({ port: 9000, path: '/' });
+const peerServer = PeerServer({ port: 9000, path: '/switchboard' });
 
 function createConnection() {
     return new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URL);
