@@ -45,7 +45,7 @@ socket.on('user-id', function(uid){
     userID = uid;
     peer.config = new Peer(userID, {
         host: window.location.hostname,
-        port: 9000,
+        port: 3000,
         path: '/switchboard'
     })
 });
