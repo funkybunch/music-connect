@@ -5,7 +5,7 @@ let socket = io();
 import InstructorPage from './pages/instructor.vue';
 import axios from "axios";
 const Classroom = Vue.extend(InstructorPage)
-const port = (process.env.NODE_ENV === "production") ? 443 : 3000;
+const port = (window.location.hostname === "localhost") ? 3000 : 443;
 
 const room = window.location.pathname.split("/")[2];
 
@@ -15,7 +15,6 @@ socket.emit('join', room);
 
 socket.on('user-id', function(uid){
     instructorApp.sendNotification('Assigned User ID: ' + uid);
-    console.log('Assigned User ID: ' + uid);
     userID = uid;
     instructorApp.$data.peer.config = new Peer(userID, {
         host: window.location.hostname,
@@ -127,7 +126,6 @@ let instructorApp = new Classroom({
             console.log('WebRTC Connection Initialized');
             webRTC.on('connection', function(conn) {
                 self.conns.push(conn);
-                console.log(self.conns);
                 self.sendNotification('WebRTC Connection Established With Student');
                 conn.on('open', function(){
                     conn.send('connected via webRTC!');
