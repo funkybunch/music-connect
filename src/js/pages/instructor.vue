@@ -4,7 +4,7 @@
     <h1 class="display">{{ classroom.class }}</h1>
     <h2>Taught by {{ classroom.teacher }}</h2>
     <a href="/classes/" v-on:click="closeClass">Return to my classes</a>
-    <main>
+    <main class="instructor">
       <section>
         <div class="card">
           <h2>Lesson Plan</h2>
@@ -12,6 +12,10 @@
           <ul>
             <li v-for="(media, index) in classroom.media"><a href="#" v-on:click.prevent="setSelectedFile(index)">{{ media.name }}</a></li>
           </ul>
+        </div>
+        <div class="card callout">
+          <h3>Add Files To Your Lesson Plan</h3>
+          <button v-on:click="" class="button primary">Upload New File</button>
         </div>
       </section>
       <section>
