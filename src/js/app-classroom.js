@@ -100,8 +100,10 @@ let classroomApp = new Classroom({
         },
         preloadMedia: function() {
             // we start preloading all the audio files
-            for (let i in this.classroom.media) {
-                this.preloadAudio(this.classroom.media[i].file);
+            if(this.classroom.media) {
+                for (let i in this.classroom.media) {
+                    this.preloadAudio(this.classroom.media[i].file);
+                }
             }
         }
     },

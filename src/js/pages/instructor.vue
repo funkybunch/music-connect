@@ -9,7 +9,7 @@
         <div class="card">
           <h2>Lesson Plan</h2>
           <p>These are the songs you have in today’s lesson plan.   You can also drag in new files to add them to the lesson plan.</p>
-          <ul style="margin-top:12px;">
+          <ul style="margin-top:12px;" v-if="(classroom.media) && (classroom.media.length > 0)">
             <li :class="(selectedFile === index) ? 'list-item selected' : 'list-item'" v-for="(media, index) in classroom.media">
               <a href="#" v-on:click.prevent="setSelectedFile(index)">
                 <img v-if="(selectedFile === index) && (status === 'playing' || status === 'resumed')" src="../../img/list-playing.svg" aria-hidden="true"/>
@@ -21,7 +21,11 @@
           </ul>
           <div class="card callout embeded">
             <h3>Add Files To Your Lesson Plan</h3>
-            <button v-on:click="" class="button primary">Upload New File</button>
+            <form id="upload-form" enctype="multipart/form-data">
+              <input type="hidden" name="classID" :value="classroom.id">
+              <input class="input-upload" ref="upload" name="media" type="file" accept=".mp3">
+            </form>
+            <button v-on:click="openUploadDiaglog" class="button primary">Upload New File</button>
           </div>
         </div>
       </section>
@@ -37,7 +41,8 @@
         </div>
         <div class="card">
           <h3>Currently Playing</h3>
-          <h4>{{ this.classroom.media[this.selectedFile].name }}</h4>
+          <h4 v-if="(classroom.media) && (classroom.media.length > 0)">{{ classroom.media[selectedFile].name }}</h4>
+          <h4 v-else>No files loaded</h4>
           <audio id="player" ref="player"></audio>
           <div style="position: relative;height:36px;margin-top: 16px;">
             <span style="position: absolute;width:100%;height:3px;top:2px;background-color:rgba(45, 175,0, .42);"></span>
@@ -66,6 +71,7 @@ export default {
   name: "classroom",
   data() {
     return {
+      uploadForm: null,
       profile: {},
       classroom: {},
       selectedFile: 0,
@@ -80,6 +86,54 @@ export default {
     }
   },
   methods: {
+    getClassInfo: function(run = 0) {
+      let self = this;
+      axios
+          .get('/api/class/?classID=' + this.room)
+          .then(response => (self.classroom = response.data))
+          .then(function() {
+            if(run === 0) {
+              self.preloadMedia();
+            }
+          });
+      setTimeout(function() {
+        self.getClassInfo();
+      }, 5000);
+    },
+    openUploadDiaglog: function() {
+      this.$refs.upload.click();
+    },
+    uploadFile: function() {
+      let formData = new FormData(this.uploadForm);
+      let self = this;
+      console.log(formData.get('media'));
+      let file = formData.get('media');
+      let fileReader = new FileReader();
+      let duration = 0;
+      fileReader.onload = function(e) {
+        let tmpPlayer = new (window.AudioContext || window.webkitAudioContext)();
+        tmpPlayer.decodeAudioData(e.target.result,
+            function(buffer) {
+              formData.append("duration", buffer.duration);
+              axios({
+                method  : 'post',
+                url : '/api/upload/',
+                data : formData,
+                headers: {'Content-Type': 'multipart/form-data' }
+              })
+                  .then((res)=>{
+                    self.getClassInfo();
+                    self.resetUploadForm();
+                  })
+                  .catch((err) => {throw err});
+            }
+        )
+      }
+      fileReader.readAsArrayBuffer(file);
+    },
+    resetUploadForm: function() {
+      this.uploadForm.reset();
+    },
     preloadAudio: function (url) {
       let audio = new Audio();
       // once this file loads, it will call loadedAudio()
@@ -187,6 +241,12 @@ export default {
   },
   mounted() {
     this.getProfile();
+    this.uploadForm = document.querySelector('#upload-form');
+    let self = this;
+    this.uploadForm.onchange = function(e) {
+      console.log("change detected");
+      self.uploadFile();
+    };
   }
 }
 
