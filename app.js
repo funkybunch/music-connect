@@ -1,6 +1,10 @@
-const app = require('express')();
-const ws = require('ws');
+const express = require('express');
+const app = express();
+const fs = require('fs');
 const session = require('express-session');
+const bodyParser = require('body-parser');
+const multer = require('multer');
+const upload = multer({ dest: 'tmp/' });
 const http = require('http').createServer(app);
 const url = require('url');
 const io = require('socket.io')(http);
@@ -40,6 +44,15 @@ app.use(session({
         maxAge: 24 * 60 * 60 * 365 * 1000
     }
 }));
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static('public'));
+
+app.use(function (err, req, res, next) {
+    console.log('This is the invalid field ->', err.field)
+    next(err)
+});
 
 const peerServer = ExpressPeerServer(http, {
     debug: true,
@@ -163,18 +176,7 @@ function createClassroom(profile, teacher, className) {
         class: className,
         token: uidgen.generateSync(),
         open: false,
-        media: [
-            {
-                name: "Raising Me Higher (Mixkit)",
-                duration: 97.67,
-                file: "/media/mixkit-raising-me-higher-34.mp3"
-            },
-            {
-                name: "Dance With Me (Mixkit)",
-                duration: 142,
-                file: "/media/mixkit-dance-with-me-3.mp3"
-            }
-        ],
+        media: [],
         attendees: 0
     });
 
@@ -258,7 +260,7 @@ app.get('/media/*', (req, res) => {
 
 // Remove this once files can be uploaded
 app.get('/uploads/*', (req, res) => {
-    res.sendFile(__dirname + '/src' + req.path);
+    res.sendFile(__dirname + req.path);
 });
 
 app.get('/auth', function (req, res) {
@@ -489,25 +491,35 @@ app.get('/api/close/', (req, res) => {
     }
 });
 
-app.post('/api/upload/', (req, res) => {
-    let classID = req.query.classID;
+app.post('/api/upload/', upload.single('media'), (req, res, next) => {
+    let classID = req.body.classID;
+    let duration = req.body.duration;
+    console.log("duration posted", duration)
     if(isOwner(req.session.profile, classID)) {
-        if (!req.files || Object.keys(req.files).length === 0) {
+        if (!req.file) {
             res.status(400);
             res.send('No files were submitted.');
         }
-        let mediaFile = req.files.media;
+        let mediaFile = req.file;
 
-        let filename = common.generateUniqueFilename(path.join(__dirname, 'uploads'), common.getFileExtension(mediaFile.name))
-        mediaFile.mv(path.join(__dirname, 'uploads', filename), function(err) {
-            if (err) {
-                res.status(500);
-                res.send("The file failed to upload");
-            }
+        let filename = common.generateUniqueFilename(path.join(__dirname, 'uploads', classID), "." + common.getFileExtension(mediaFile.originalname));
+
+        fs.mkdir(path.join(__dirname, 'uploads', classID), { recursive: true }, (err) => {
+            if (err) throw err;
         });
 
+        fs.rename(path.join(__dirname, mediaFile.path), path.join(__dirname, 'uploads', classID, filename), function(err) {
+            if (err) throw err
+            console.log('Successfully moved!')
+        })
+
         let classData = classrooms.get(classID);
-        classData.media.push('/media/' + filename);
+        let tmp = {
+                name: mediaFile.originalname,
+                duration: duration,
+                file: "/uploads/" + classID + "/" + filename
+            };
+        classData.media.push(tmp);
         classrooms.set(classID, classData);
 
         res.status(200);
