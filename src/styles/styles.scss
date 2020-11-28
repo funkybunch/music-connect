@@ -16,6 +16,18 @@ form button { width: 15%; background: white; color: black; border: none; padding
 section { width: 60%; display: inline-block; margin-top: 30px; }
 .instructor section { width: 45%; display: inline-block; margin-right: 5%; margin-top: 30px; }
 aside { width: 30%; display: inline-block; margin-left: 5%; margin-top: 30px; }
+
+.alert {
+  border: 2px solid #0250AE;
+  border-radius: 12px;
+  padding: 12px;
+  max-width: 640px;
+  margin: 24px 24px 24px 0;
+}
+.alert p {
+  font-size: 12px;
+}
+
 .card {
   background: #FFFFFF;
   box-shadow: 0 6px 6px 0 rgba(0,0,0,0.23), 0 10px 20px 0 rgba(0,0,0,0.19);

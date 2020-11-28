@@ -38,7 +38,14 @@
     <main v-else>
       <section>
         <h3>We&apos;re all set!</h3>
-        <p>Join when you are ready</p>
+        <p>Join when you are ready.</p>
+        <div class="alert">
+          <h2>Notice</h2>
+          <p>
+            This application is part of a research project conducted by students at the Georgia Institute of Technology (Georgia Tech).
+            By continuing you agree that data may be collected about your experience and usage of the application.  This data is anonymous and will not include personal information.
+          </p>
+        </div>
         <button v-on:click="joinClass" style="align-self:center;cursor:pointer;padding:12px 16px;background-color:#0250AE;border-radius:8px;font-weight:bold;color:white;border:none;">Join Class</button>
       </section>
     </main>
