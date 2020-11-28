@@ -29,6 +29,12 @@ aside { width: 30%; display: inline-block; margin-left: 5%; margin-top: 30px; }
   padding:40px 80px;
   text-align:center;
 }
+.card.callout.embeded {
+  border:3px solid rgba(79,79,79,0.16);
+  box-shadow: none;
+  margin-top: 24px;
+  margin-bottom: 0;
+}
 .card h3 {
   font-family: 'Poppins', sans-serif;
   font-size: 36px;
@@ -145,6 +151,10 @@ p {
   align-items: center;
   justify-items: flex-start;
   margin-bottom: 12px
+}
+
+.list-item.selected {
+  background: #DEFFDF;
 }
 
 .list-item a {

@@ -9,13 +9,20 @@
         <div class="card">
           <h2>Lesson Plan</h2>
           <p>These are the songs you have in today’s lesson plan.   You can also drag in new files to add them to the lesson plan.</p>
-          <ul>
-            <li v-for="(media, index) in classroom.media"><a href="#" v-on:click.prevent="setSelectedFile(index)">{{ media.name }}</a></li>
+          <ul style="margin-top:12px;">
+            <li :class="(selectedFile === index) ? 'list-item selected' : 'list-item'" v-for="(media, index) in classroom.media">
+              <a href="#" v-on:click.prevent="setSelectedFile(index)">
+                <img v-if="(selectedFile === index) && (status === 'playing' || status === 'resumed')" src="../../img/list-playing.svg" aria-hidden="true"/>
+                <img v-else-if="selectedFile === index" src="../../img/list-selected-playing.svg" aria-hidden="true"/>
+                <img v-else src="../../img/list-queue.svg" aria-hidden="true"/>
+                <h4>{{ media.name }}</h4>
+              </a>
+            </li>
           </ul>
-        </div>
-        <div class="card callout">
-          <h3>Add Files To Your Lesson Plan</h3>
-          <button v-on:click="" class="button primary">Upload New File</button>
+          <div class="card callout embeded">
+            <h3>Add Files To Your Lesson Plan</h3>
+            <button v-on:click="" class="button primary">Upload New File</button>
+          </div>
         </div>
       </section>
       <section>
