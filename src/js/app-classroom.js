@@ -1,5 +1,6 @@
 import Peer from 'peerjs';
 import Vue from 'vue';
+import "../styles/styles.scss";
 let socket = io();
 
 import ClassroomPage from './pages/classroom.vue';

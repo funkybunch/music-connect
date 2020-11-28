@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="38px" height="38px" viewBox="0 0 38 38" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 63.1 (92452) - https://sketch.com -->
+    <title>Group</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Instructor-View" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="I---1-Instructor-Active-Classroom" transform="translate(-118.000000, -433.000000)">
+            <g id="Group-6-Copy-6" transform="translate(98.000000, 417.000000)">
+                <g id="Group" transform="translate(20.000000, 16.000000)">
+                    <circle id="Oval" fill="#2DAF00" cx="19" cy="19" r="19"></circle>
+                    <g id="play-solid" transform="translate(13.000000, 11.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                        <path d="M13.2628696,6.70810092 L2.26256305,0.205239945 C1.36878815,-0.322863613 0,0.18961558 0,1.49581255 L0,14.4984096 C0,15.6702371 1.27191045,16.3764584 2.26256305,15.7889822 L13.2628696,9.28924613 C14.244147,8.7111446 14.2472721,7.28620245 13.2628696,6.70810092 Z" id="Path"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

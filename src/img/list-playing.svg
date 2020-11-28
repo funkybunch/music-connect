@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="38px" height="38px" viewBox="0 0 38 38" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 63.1 (92452) - https://sketch.com -->
+    <title>Group</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Instructor-View" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="I---1-Instructor-Active-Classroom" transform="translate(-118.000000, -356.000000)">
+            <g id="Group-6-Copy-4" transform="translate(98.000000, 340.000000)">
+                <g id="Group-4" transform="translate(20.000000, 16.000000)">
+                    <g id="Group-5">
+                        <g id="Cloud_Signage_Icon">
+                            <g id="Group">
+                                <circle id="Oval" fill="#2DAF00" cx="19" cy="19" r="19"></circle>
+                                <path d="M16.1428571,27 L12.7142857,27 C11.7678571,27 11,26.2321429 11,25.2857143 L11,12.7142857 C11,11.7678571 11.7678571,11 12.7142857,11 L16.1428571,11 C17.0892857,11 17.8571429,11.7678571 17.8571429,12.7142857 L17.8571429,25.2857143 C17.8571429,26.2321429 17.0892857,27 16.1428571,27 Z M27,25.2857143 L27,12.7142857 C27,11.7678571 26.2321429,11 25.2857143,11 L21.8571429,11 C20.9107143,11 20.1428571,11.7678571 20.1428571,12.7142857 L20.1428571,25.2857143 C20.1428571,26.2321429 20.9107143,27 21.8571429,27 L25.2857143,27 C26.2321429,27 27,26.2321429 27,25.2857143 Z" id="Shape" fill="#FFFFFF" fill-rule="nonzero"></path>
+                                <g id="play-solid" transform="translate(13.000000, 11.000000)">
+                                    <g id="pause-solid"></g>
+                                </g>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
