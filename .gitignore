@@ -107,3 +107,4 @@ dist
 google-client-credentials.json
 auth.js
 data/instructors.json
+uploads/

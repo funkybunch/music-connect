@@ -127,6 +127,10 @@ p {
   border: 3px solid #0250AE;
 }
 
+form#upload-form {
+  display:none;
+}
+
 .input-text {
   font-size: 16px;
   margin-bottom:12px;
@@ -139,6 +143,10 @@ p {
 
 .input-text.error {
   border-color: #AF0000;
+}
+
+.input-upload {
+  display: none;
 }
 
 .list-item {
