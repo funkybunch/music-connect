@@ -117,7 +117,7 @@ export default {
     copyClassLink: function (classID) {
       let port = location.port;
       let url = "";
-      if(port in ["0", "80", "443"]) {
+      if(port in ["0", "80", "443", ""]) {
         url = window.location.protocol + "//" + window.location.hostname + "/c/" + classID;
       } else {
         url = window.location.protocol + "//" + window.location.hostname + ":" + port + "/c/" + classID;
