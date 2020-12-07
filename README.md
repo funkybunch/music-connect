@@ -8,6 +8,7 @@
 [![build][build]][build-url]
 [![license][license]][license-url]
 [![deps][deps]][deps-url]
+[![webpack][webpack]][webpack-url]
 [![prs][prs]][prs-url]
   
   
@@ -17,6 +18,15 @@
   </p>
 </div>
 
+## Installation
+1. Fork or clone the repository.
+2. Run `npm install`
+3. Run `npm build`
+4. Run `npm start`
+
+## Contributing
+See [CONTRIBUTING.md]([prs-url])
+
 [build]: https://github.com/funkybunch/music-connect/workflows/NPM%20Build%20Test/badge.svg
 [build-url]: https://github.com/funkybunch/music-connect/actions?query=workflow%3A%22NPM+Build+Test%22
 [deps]: https://img.shields.io/david/funkybunch/music-connect.svg
@@ -25,3 +35,7 @@
 [prs-url]: https://github.com/funkybunch/music-connect/blob/main/CONTRIBUTING.md
 [license]: https://img.shields.io/github/license/funkybunch/music-connect
 [license-url]: https://github.com/funkybunch/music-connect/blob/main/LICENSE
+[sponsor]: https://img.shields.io/badge/sponsor-%2410-brightgreen
+[sponsor-url]: 
+[webpack]: https://img.shields.io/github/package-json/dependency-version/funkybunch/music-connect/webpack
+[webpack-url]: https://npmjs.org/package/webpack/
