@@ -43,7 +43,7 @@ In order to run the application, even locally, you will also need to setup `OAut
 5. Rename `.env-sample` to `.env`.  Inside change the value of `APPSECRET` to any random string (this is your JWT secret) and the value of `INSTRUCTORS` to include your email address.  If you do not need more than one instructor email address, then remove the other.  If you need more, expand the array as you need.
 
 ## Running
-1. Run `npm build`
+1. Run `npm run build`
 2. Run `npm start`
 3. Open [`http://localhost:3000`](http://localhost:3000)
 

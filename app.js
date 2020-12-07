@@ -204,6 +204,7 @@ function getUserData(client, request) {
                 name: profile.names[0].displayName,
                 emails: profile.emailAddresses
             };
+            userProfile.isInstructor = isInstructor(userProfile);
             saveProfileToSession(request, userProfile);
         }
     });
@@ -217,7 +218,8 @@ app.get('/', (req, res) => {
             res.redirect('/c/' + req.session.redirect.classroom);
         }
     } else {
-        res.send('<p>App Home Page</p><p><a href="/classes/">My Classes</a></p><p><a href="/signin/">Sign In</a></p>');
+        res.status(200);
+        res.sendFile(__dirname + '/src/home.html');
     }
 });
 
