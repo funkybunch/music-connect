@@ -21,8 +21,8 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - run: npm ci
     - run: npm run build
-    - env:
+      env:
         NODE_ENV: test
-        GOOGLE_CRED: {}
-        INSTRUCTORS: []
-        APPSECRET: g1thu8T3$t
+        GOOGLE_CRED: '{}'
+        INSTRUCTORS: '[]'
+        APPSECRET: 'g1thu8T3$t'
