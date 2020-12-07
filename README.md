@@ -4,7 +4,8 @@
   </a>
   <br>
   <br>
-![NPM Build Test](https://github.com/funkybunch/music-connect/workflows/NPM%20Build%20Test/badge.svg)
+  
+[![build][build]][build-url]
 [![deps][deps]][deps-url]
   
   
@@ -14,6 +15,8 @@
   </p>
 </div>
 
+[build]: https://github.com/funkybunch/music-connect/workflows/NPM%20Build%20Test/badge.svg
+[build-url]: https://github.com/funkybunch/music-connect/actions?query=workflow%3A%22NPM+Build+Test%22
 [deps]: https://img.shields.io/david/funkybunch/music-connect.svg
 [deps-url]: https://david-dm.org/funkybunch/music-connect
 [prs]: https://img.shields.io/badge/PRs-welcome-brightgreen.svg
