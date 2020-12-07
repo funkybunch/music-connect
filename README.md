@@ -35,6 +35,11 @@ Both of these scopes are considered Non-Sensitive and do not require app verific
 In order to run the application, even locally, you will also need to setup `OAuth 2.0` Client ID at [https://console.developers.google.com/apis/credentials](https://console.developers.google.com/apis/credentials).  Do this after you have already setup your Consent Screen.
 
 ## Getting Started
+### Dependencies
+This software uses the Node JS runtime.
+1. If you don't already have it, [install Node JS](https://nodejs.org/en/) before continuing.
+2. If you don't already have it, [install Node Package Manager (NPM)](https://www.npmjs.com/get-npm) before continuing.
+
 ### Installation
 1. Fork or clone the repository.
 2. Run `npm install`
