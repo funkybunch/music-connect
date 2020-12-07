@@ -1,4 +1,4 @@
-<div align="center">
+<div align="left">
   <a href="https://github.com/funkybunch/music-connect">
     <img src="https://raw.githubusercontent.com/funkybunch/music-connect/main/src/img/music-connect.svg" width="400" alt="Music Connect Logo"/>
   </a>
