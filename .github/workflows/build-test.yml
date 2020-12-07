@@ -22,7 +22,7 @@ jobs:
     - run: npm ci
     - run: npm run build
       env:
-        NODE_ENV: test
+        NODE_ENV: production
         GOOGLE_CRED: '{}'
         INSTRUCTORS: '[]'
         APPSECRET: 'g1thu8T3$t'
