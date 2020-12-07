@@ -8,7 +8,7 @@
 [![build][build]][build-url]
 [![license][license]][license-url]
 [![deps][deps]][deps-url]
-[![prs][deps]][deps-url]
+[![prs][prs]][prs-url]
   
   
   # Music Connect
