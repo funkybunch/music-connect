@@ -58,7 +58,7 @@ If you are testing instructor and student view all on the same computer, you mus
 
 
 ## Contributing
-See [CONTRIBUTING.md]([prs-url])
+See [CONTRIBUTING.md](https://github.com/funkybunch/music-connect/blob/main/CONTRIBUTING.md)
 
 [build]: https://github.com/funkybunch/music-connect/workflows/NPM%20Build%20Test/badge.svg
 [build-url]: https://github.com/funkybunch/music-connect/actions?query=workflow%3A%22NPM+Build+Test%22
