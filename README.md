@@ -1,6 +1,6 @@
 <div align="center">
   <a href="https://github.com/funkybunch/music-connect">
-![Music Connect Logo](https://raw.githubusercontent.com/funkybunch/music-connect/main/src/img/music-connect.svg)
+    <img src="https://raw.githubusercontent.com/funkybunch/music-connect/main/src/img/music-connect.svg" width="400" alt="Music Connect Logo"/>
   </a>
   <br>
   <br>
