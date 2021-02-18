@@ -30,7 +30,7 @@
     "express-fileupload": "^1.2.0",
     "express-session": "^1.17.1",
     "file-loader": "^6.2.0",
-    "googleapis": "^64.0.0",
+    "googleapis": "^67.1.0",
     "image-webpack-loader": "^7.0.1",
     "multer": "^1.4.2",
     "peer": "^0.5.3",
